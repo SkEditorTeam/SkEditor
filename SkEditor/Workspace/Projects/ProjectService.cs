@@ -27,7 +27,7 @@ public class ProjectService(
         LocalNodeFileSystem localNodeFileSystem = new(path, logs);
         CurrentProject = localNodeFileSystem;
 
-        string? name = Path.GetFileName(Path.GetDirectoryName(path));
+        string? name = new DirectoryInfo(path).Name;
         if (name is not null)
         {
             recents.AddRecentItem(name, path, true, DateTime.Now);
