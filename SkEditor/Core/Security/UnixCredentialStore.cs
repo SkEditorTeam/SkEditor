@@ -29,9 +29,16 @@ public class UnixCredentialStore : ICredentialStore
                 Directory.CreateDirectory(directory);
             }
 
-            File.WriteAllBytes(keyPath, _key);
+            FileStreamOptions options = new()
+            {
+                Mode = FileMode.CreateNew,
+                Access = FileAccess.Write,
+                Share = FileShare.None,
+                UnixCreateMode = UnixFileMode.UserRead | UnixFileMode.UserWrite
+            };
 
-            File.SetUnixFileMode(keyPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            using FileStream fs = new(keyPath, options);
+            fs.Write(_key, 0, _key.Length);
         }
         else
         {
