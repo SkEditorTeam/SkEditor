@@ -189,15 +189,18 @@ public partial class RemoteConnectionViewModel(
 
         e.Handled = true;
 
+        string name = ConnectionInfo.Name;
         ConnectionInfo = new RemoteConnectionInfo
         {
+            Name = name,
             Host = connectionInfo.Host,
             Port = connectionInfo.Port.ToString(),
             Username = connectionInfo.Username ?? "",
             Password = connectionInfo.Password ?? "",
             AuthMethod = connectionInfo.Password != null
                 ? RemoteAuthMethod.Password
-                : ConnectionInfo.AuthMethod
+                : ConnectionInfo.AuthMethod,
+            CustomRootPath = connectionInfo.RootPath ?? "",
         };
 
         PasteCompleted?.Invoke();
