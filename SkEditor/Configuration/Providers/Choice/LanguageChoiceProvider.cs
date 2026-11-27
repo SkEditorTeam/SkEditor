@@ -21,6 +21,11 @@ public class LanguageChoiceProvider(ITranslationService translationService) : IS
     {
         List<string> availableLanguages = [];
 
+        if (!Directory.Exists(translationService.LanguagesFolder))
+        {
+            return availableLanguages;
+        }
+        
         string[] files = Directory.GetFiles(translationService.LanguagesFolder);
         availableLanguages.AddRange(files
             .Select(Path.GetFileNameWithoutExtension)
