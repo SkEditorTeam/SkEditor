@@ -199,6 +199,11 @@ public class App : Application
         {
             return false;
         }
+        
+        if (Microsoft.Win32.Registry.GetValue(@"HKEY_CURRENT_USER\Software\Notro\SkEditor", "Installed", null) is 1)
+        {
+            return true;
+        }
 
         string baseDir = AppContext.BaseDirectory;
         string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
