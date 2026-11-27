@@ -1,11 +1,11 @@
-﻿using System.IO;
+﻿using System.IO.Abstractions;
 using System.Text.Json;
 using System.Threading.Tasks;
 using SkEditor.Configuration.Configs;
 
 namespace SkEditor.Configuration;
 
-public class LegacyConfigMigrator(IConfigService config)
+public class LegacyConfigMigrator(IConfigService config, IFileSystem fileSystem)
 {
     /// <summary>
     ///     Check and migrate old configuration files to the new format asynchronously.
@@ -14,21 +14,21 @@ public class LegacyConfigMigrator(IConfigService config)
     public async Task MigrateConfigsAsync()
     {
         string newPath = config.GetAppDataPath();
-        string? oldPath = Directory.GetParent(newPath)?.FullName;
+        string? oldPath = fileSystem.Directory.GetParent(newPath)?.FullName;
 
         if (string.IsNullOrEmpty(oldPath))
         {
             return;
         }
 
-        string oldSettings = Path.Combine(oldPath, "settings.json");
+        string oldSettings = fileSystem.Path.Combine(oldPath, "settings.json");
 
-        if (!Directory.Exists(oldPath) || Directory.Exists(newPath) || !File.Exists(oldSettings))
+        if (!fileSystem.Directory.Exists(oldPath) || fileSystem.Directory.Exists(newPath) || !fileSystem.File.Exists(oldSettings))
         {
             return;
         }
 
-        string json = await File.ReadAllTextAsync(oldSettings);
+        string json = await fileSystem.File.ReadAllTextAsync(oldSettings);
 
         OldAppConfig? oldAppConfig =
             JsonSerializer.Deserialize<OldAppConfig>(json, OldAppJsonContext.Default.OldAppConfig);
@@ -69,7 +69,7 @@ public class LegacyConfigMigrator(IConfigService config)
             secretsConfig.SkUnityApiKey = oldAppConfig.SkUnityApiKey;
             secretsConfig.PastebinApiKey = oldAppConfig.PastebinApiKey;
 
-            await config.SaveAllConfigsAsync();
+            await config.SaveAllConfigsImmediateAsync();
         }
     }
 }
