@@ -178,7 +178,7 @@ public class SessionRestoreService(
 
     private static void RestoreTabState(FileTabViewModel tab, SessionStateFile sessionFile)
     {
-        tab.CaretOffset = sessionFile.CaretOffset;
+        tab.CaretOffset = Math.Clamp(sessionFile.CaretOffset, 0, tab.Document.TextLength);
         tab.ScrollOffset = sessionFile.ScrollOffset;
     }
 }
