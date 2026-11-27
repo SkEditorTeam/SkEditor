@@ -11,14 +11,16 @@ namespace SkEditor.Windowing;
 
 public class WindowInstanceService(ILogService logs)
 {
+    private Mutex? _mutex;
+    
     public async Task<bool> HandleSingleInstance(IClassicDesktopStyleApplicationLifetime desktop)
     {
-        Mutex mutex = new(true, $@"Local\{NamedPipeServer.PipeName}Mutex");
+        _mutex = new Mutex(true, $@"Local\{NamedPipeServer.PipeName}Mutex");
 
         bool isFirstInstance;
         try
         {
-            isFirstInstance = mutex.WaitOne(TimeSpan.Zero, true);
+            isFirstInstance = _mutex.WaitOne(TimeSpan.Zero, true);
         }
         catch (AbandonedMutexException ex)
         {
@@ -30,8 +32,7 @@ public class WindowInstanceService(ILogService logs)
         {
             desktop.Exit += (_, _) =>
             {
-                mutex.ReleaseMutex();
-                mutex.Dispose();
+                ReleaseMutex();
             };
 
             return true;
@@ -42,6 +43,20 @@ public class WindowInstanceService(ILogService logs)
         return false;
     }
 
+    public void ReleaseMutex()
+    {
+        try
+        {
+            _mutex?.ReleaseMutex();
+            _mutex?.Dispose();
+            _mutex = null;
+        }
+        catch (Exception ex)
+        {
+            logs.Error(ex, "Error releasing mutex");
+        }
+    }
+    
     private async Task SendArgsToExistingInstance()
     {
         try

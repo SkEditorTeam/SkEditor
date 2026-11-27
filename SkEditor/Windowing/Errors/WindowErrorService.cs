@@ -11,7 +11,7 @@ using SkEditor.Windowing.UI;
 
 namespace SkEditor.Windowing.Errors;
 
-public class WindowErrorService(IConfigService configs, ICrashService crashes, ILogService logs)
+public class WindowErrorService(IConfigService configs, ICrashService crashes, ILogService logs, WindowInstanceService instances)
 {
     private int _crashHandlingStarted;
 
@@ -65,6 +65,7 @@ public class WindowErrorService(IConfigService configs, ICrashService crashes, I
 
                 if (!string.IsNullOrEmpty(processPath))
                 {
+                    instances.ReleaseMutex();
                     Process.Start(processPath, "--crash");
                 }
             }
