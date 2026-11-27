@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
@@ -26,7 +27,8 @@ public class FileService(
 
     private readonly SemaphoreSlim _saveSemaphore = new(1, 1);
 
-    private CancellationTokenSource? _saveCts;
+    private readonly Lock _ctsLock = new();
+    private readonly Dictionary<IFileTab, CancellationTokenSource> _activeSaves = [];
 
     /// <summary>
     ///     Prompts the user to select a save location and saves the file there. Updates the tab's header and path accordingly
@@ -75,38 +77,64 @@ public class FileService(
     /// <returns>True if success, false otherwise (failed)</returns>
     private async Task<bool> PerformSaveAsync(IFileTab fileTab)
     {
-        if (_saveCts is not null)
+        CancellationTokenSource? previousCts;
+        CancellationTokenSource cts = new();
+
+        lock (_ctsLock)
         {
-            await _saveCts.CancelAsync();
+            _activeSaves.TryGetValue(fileTab, out previousCts);
+            _activeSaves[fileTab] = cts;
         }
 
-        _saveCts = new CancellationTokenSource();
-        CancellationToken token = _saveCts.Token;
+        if (previousCts is not null)
+        {
+            try
+            {
+                await previousCts.CancelAsync();
+            }
+            catch (ObjectDisposedException) { }
+        }
 
-        using MemoryStream memoryStream = new();
-        await using StreamWriter writer = new(memoryStream, Utf8NoBom, leaveOpen: true);
+        CancellationToken token = cts.Token;
 
-        fileTab.WriteContentStream(writer);
-
-        await writer.FlushAsync(token);
-        memoryStream.Position = 0;
-
-        await _saveSemaphore.WaitAsync(token);
         try
         {
-            await fileTab.File.SaveAsync(memoryStream, token);
-            await fileTab.File.UpdateSnapshotAsync(memoryStream);
-        }
-        catch (UnauthorizedAccessException ex)
-        {
-            logs.Error(ex, "Failed to save file due to unauthorized access.");
-            Notification notification = Notification
-                .Create(TranslationKey.FileExplorerSaveFailedTitle)
-                .WithMessage(TranslationKey.FileExplorerSaveFailedPermission)
-                .WithType(NotificationType.Error);
+            using MemoryStream memoryStream = new();
+            await using StreamWriter writer = new(memoryStream, Utf8NoBom, leaveOpen: true);
 
-            notifications.Show(notification);
-            return false;
+            fileTab.WriteContentStream(writer);
+
+            await writer.FlushAsync(token);
+            memoryStream.Position = 0;
+
+            await _saveSemaphore.WaitAsync(token);
+            try
+            {
+                await fileTab.File.SaveAsync(memoryStream, token);
+                await fileTab.File.UpdateSnapshotAsync(memoryStream);
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                logs.Error(ex, "Failed to save file due to unauthorized access.");
+                Notification notification = Notification
+                    .Create(TranslationKey.FileExplorerSaveFailedTitle)
+                    .WithMessage(TranslationKey.FileExplorerSaveFailedPermission)
+                    .WithType(NotificationType.Error);
+
+                notifications.Show(notification);
+                return false;
+            }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+            finally
+            {
+                _saveSemaphore.Release();
+            }
+
+            fileTab.MarkOriginal();
+            return true;
         }
         catch (OperationCanceledException)
         {
@@ -114,11 +142,17 @@ public class FileService(
         }
         finally
         {
-            _saveSemaphore.Release();
-        }
+            lock (_ctsLock)
+            {
+                if (_activeSaves.TryGetValue(fileTab, out CancellationTokenSource? current) &&
+                    ReferenceEquals(current, cts))
+                {
+                    _activeSaves.Remove(fileTab);
+                }
+            }
 
-        fileTab.MarkOriginal();
-        return true;
+            cts.Dispose();
+        }
     }
 
     public async Task<bool> LoadAndReadFileAsync(IFileTab fileTab)
