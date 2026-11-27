@@ -167,8 +167,10 @@ public class App : Application
         
         services.AddSingleton<IAppInfo>(new AppInfo(semVersion, isInstalled));
         
-        services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ =>
-            (IClassicDesktopStyleApplicationLifetime)Current!.ApplicationLifetime!);
+        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        {
+            services.AddSingleton<IClassicDesktopStyleApplicationLifetime>(_ => desktop);
+        }
 
         services.AddSingleton<IFileSystem, FileSystem>();
         services.AddSingleton(TimeProvider.System);

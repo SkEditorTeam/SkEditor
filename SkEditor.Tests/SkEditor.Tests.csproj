@@ -9,21 +9,21 @@
 
     <ItemGroup>
         <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
-        <PackageReference Include="coverlet.collector" Version="10.1.0">
+        <PackageReference Include="coverlet.collector" Version="10.1.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.12.0" />
         <PackageReference Include="NSubstitute" Version="6.2.0" />
         <PackageReference Include="RichardSzalay.MockHttp" Version="7.1.0" />
-        <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="22.3.0" />
+        <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="23.1.0" />
         <PackageReference Include="xunit" Version="2.9.3" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0">
+        <PackageReference Include="xunit.runner.visualstudio" Version="4.0.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
 
-        <PackageReference Include="FluentAvaloniaUI" Version="3.0.0" ExcludeAssets="compile;runtime" />
+        <PackageReference Include="FluentAvaloniaUI" Version="3.1.0" ExcludeAssets="compile;runtime" />
     </ItemGroup>
 
     <ItemGroup>
