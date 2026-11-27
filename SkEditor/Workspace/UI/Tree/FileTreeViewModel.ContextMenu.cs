@@ -36,7 +36,13 @@ public partial class FileTreeViewModel
 
         RootItems.Clear();
         SelectedNodes.Clear();
+        
+        if (FileSystem is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
         FileSystem = null;
+        
         IsLoading = false;
         WeakReferenceMessenger.Default.Send(new ProjectChangedMessage(null));
     }
