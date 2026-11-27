@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Input;
 using FluentIcons.Common;
 using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
@@ -65,6 +66,10 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileSer
 
         foreach (ITab tab in tabsToClose)
         {
+            if (tab is IClosableTab closableTab)
+            {
+                closableTab.OnClosed();
+            }
             tabs.ForceCloseTab(tab);
         }
     }
