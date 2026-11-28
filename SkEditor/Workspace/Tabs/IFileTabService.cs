@@ -20,6 +20,17 @@ public interface IFileTabService
     ///     Opens the specified file in a new tab.
     /// </summary>
     Task OpenFileAsync(BaseFile file);
+    
+    /// <summary>
+    ///     Saves the file. If the file has not been saved before, it prompts the user to select a location to save the file.
+    /// </summary>
+    Task<bool> SaveFileAsync(IFileTab fileTab);
+
+    /// <summary>
+    ///     Prompts the user to select a location and saves the file at the specified location, regardless of whether it has
+    ///     been saved before or not.
+    /// </summary>
+    Task<bool> SaveFileAsAsync(IFileTab fileTab);
 
     /// <summary>
     ///     Loads and opens the specified pre-constructed file tab.

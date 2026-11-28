@@ -10,7 +10,6 @@ using SkEditor.Core.Localization;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Features;
 using SkEditor.Editor.Tabs.Capabilities;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Templates;
 
@@ -19,7 +18,7 @@ namespace SkEditor.Workspace.Tabs;
 public class TabService(
     IFileFeatureService features,
     TabViewLocator tabViewLocator,
-    IFileService files,
+    Lazy<IFileTabService> fileTabs,
     IDialogService dialogs,
     INotificationService notifs)
     : ITabService
@@ -172,7 +171,7 @@ public class TabService(
     
             if (result == StandardDialogResult.Yes)
             {
-                bool saved = await files.SaveFileAsync(fileTab);
+                bool saved = await fileTabs.Value.SaveFileAsync(fileTab);
                 if (!saved)
                 {
                     return;

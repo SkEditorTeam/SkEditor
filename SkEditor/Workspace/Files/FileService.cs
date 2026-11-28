@@ -16,8 +16,6 @@ using SkEditor.Workspace.Tabs.Capabilities;
 namespace SkEditor.Workspace.Files;
 
 public class FileService(
-    IFilePickerService filePicker,
-    IRecentFileService recentFiles,
     INotificationService notifications,
     IDialogService dialogs,
     ILogService logs)
@@ -29,53 +27,12 @@ public class FileService(
 
     private readonly Lock _ctsLock = new();
     private readonly Dictionary<IFileTab, CancellationTokenSource> _activeSaves = [];
-
-    /// <summary>
-    ///     Prompts the user to select a save location and saves the file there. Updates the tab's header and path accordingly
-    /// </summary>
-    /// <returns>True if success, false otherwise (cancelled, failed)</returns>
-    public async Task<bool> SaveFileAsAsync(IFileTab fileTab)
-    {
-        string? oldPath = fileTab.File.Path;
-
-        string? path = await filePicker.SaveFileAsync(fileTab.Header.Value, oldPath);
-        if (path == null)
-        {
-            return false;
-        }
-
-        fileTab.File.Path = path;
-        
-        bool success = await PerformSaveAsync(fileTab);
-
-        if (success)
-        {
-            fileTab.UpdateHeader();
-            recentFiles.UpdateRecentItem(oldPath, path);
-        }
-        else
-        {
-            fileTab.File.Path = oldPath;
-        }
-        
-        return success;
-    }
-    
-    public async Task<bool> SaveFileAsync(IFileTab fileTab)
-    {
-        if (fileTab.File.Path == null)
-        {
-            return await SaveFileAsAsync(fileTab);
-        }
-
-        return await PerformSaveAsync(fileTab);
-    }
     
     /// <summary>
     ///     Performs the actual save operation
     /// </summary>
     /// <returns>True if success, false otherwise (failed)</returns>
-    private async Task<bool> PerformSaveAsync(IFileTab fileTab)
+    public async Task<bool> PerformSaveAsync(IFileTab fileTab)
     {
         CancellationTokenSource? previousCts;
         CancellationTokenSource cts = new();

@@ -101,6 +101,44 @@ public class FileTabService(
         }
     }
 
+    public async Task<bool> SaveFileAsAsync(IFileTab fileTab)
+    {
+        string? oldPath = fileTab.File.Path;
+
+        string? startPath = fileTab.File is LocalFile ? oldPath : null;
+        string? path = await filePicker.SaveFileAsync(fileTab.Header.Value, startPath);
+        if (path == null)
+        {
+            return false;
+        }
+
+        fileTab.File.Path = path;
+
+        bool success = await files.PerformSaveAsync(fileTab);
+
+        if (success)
+        {
+            fileTab.UpdateHeader();
+            recentFiles.UpdateRecentItem(oldPath, path);
+        }
+        else
+        {
+            fileTab.File.Path = oldPath;
+        }
+
+        return success;
+    }
+    
+    public async Task<bool> SaveFileAsync(IFileTab fileTab)
+    {
+        if (fileTab.File.Path == null)
+        {
+            return await SaveFileAsAsync(fileTab);
+        }
+
+        return await files.PerformSaveAsync(fileTab);
+    }
+    
     public void UpdateFileDetails(string oldPath, string newName, string newPath)
     {
         FileTabViewModel? fileTab = tabs.AllTabs

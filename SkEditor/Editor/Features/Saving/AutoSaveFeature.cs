@@ -3,12 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using SkEditor.Configuration.Configs;
 using SkEditor.Editor.Tabs.Capabilities;
-using SkEditor.Workspace.Files;
+using SkEditor.Workspace.Tabs;
 using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.Features.Saving;
 
-public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEditorFeature
+public class AutoSaveFeature(AppSettings appSettings, IFileTabService fileTabs) : IEditorFeature
 {
     private readonly TimeSpan _debounceDelay = TimeSpan.FromSeconds(1);
     private readonly TimeSpan _maxDelay = TimeSpan.FromSeconds(10);
@@ -95,7 +95,7 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
         {
             await Task.Delay(delay, token);
 
-            await files.SaveFileAsync(_fileTab);
+            await fileTabs.SaveFileAsync(_fileTab);
 
             _lastChangeAt = DateTime.MinValue;
         }
@@ -117,7 +117,7 @@ public class AutoSaveFeature(AppSettings appSettings, IFileService files) : IEdi
             await _cts.CancelAsync();
         }
 
-        await files.SaveFileAsync(_fileTab);
+        await fileTabs.SaveFileAsync(_fileTab);
         _lastChangeAt = DateTime.MinValue;
     }
 }

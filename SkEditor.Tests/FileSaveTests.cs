@@ -5,6 +5,7 @@ using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Extensions;
+using SkEditor.Core.Localization;
 using SkEditor.Core.Logging;
 using SkEditor.Core.Notifications;
 using SkEditor.Editor.Features;
@@ -32,10 +33,10 @@ public class FileSaveTests
             File = new LocalFile("/path/to/file.txt", fileSystem: mockFileSystem)
         };
 
-        FileService fileService = CreateFileService();
+        FileTabService fileTabService = CreateFileTabService();
 
         new SaveIndicatorFeature().Attach(fileTabViewModel);
-        new AutoSaveFeature(appSettings, fileService).Attach(fileTabViewModel);
+        new AutoSaveFeature(appSettings, fileTabService).Attach(fileTabViewModel);
         
         fileTabViewModel.Document.Text = "newcontent";
         
@@ -48,17 +49,17 @@ public class FileSaveTests
         AppSettings appSettings = new() { IsAutoSaveEnabled = true };
         ExperimentsConfig experimentsConfig = new();
         MockFileSystem mockFileSystem = new();
-        mockFileSystem.AddFile("/path/to/file.txt", new MockFileData("Test"));
+        mockFileSystem.AddFile("/path/to/file.txt", new MockFileData("oldcontent"));
 
         FileTabViewModel fileTabViewModel = new("Test".ToTranslatable(), appSettings, experimentsConfig)
         {
             File = new LocalFile("/path/to/file.txt", fileSystem: mockFileSystem)
         };
 
-        FileService fileService = CreateFileService();
+        FileTabService fileTabService = CreateFileTabService();
 
         new SaveIndicatorFeature().Attach(fileTabViewModel);
-        new AutoSaveFeature(appSettings, fileService).Attach(fileTabViewModel);
+        new AutoSaveFeature(appSettings, fileTabService).Attach(fileTabViewModel);
 
         fileTabViewModel.Document.Text = "newcontent";
 
@@ -68,7 +69,7 @@ public class FileSaveTests
         TabService tabService = new(
             Substitute.For<IFileFeatureService>(),
             new TabViewLocator(),
-            fileService,
+            fileTabService,
             dialogService,
             Substitute.For<INotificationService>()
         );
@@ -79,11 +80,21 @@ public class FileSaveTests
         mockFileSystem.GetFile("/path/to/file.txt").TextContents.Should().Be("newcontent");
     }
 
-    private static FileService CreateFileService() => new(
-        Substitute.For<IFilePickerService>(),
-        Substitute.For<IRecentFileService>(),
-        Substitute.For<INotificationService>(),
-        Substitute.For<IDialogService>(),
-        Substitute.For<ILogService>()
-    );
+    private static FileTabService CreateFileTabService()
+    {
+        FileService fileService = new(
+            Substitute.For<INotificationService>(),
+            Substitute.For<IDialogService>(),
+            Substitute.For<ILogService>()
+        );
+        
+        return new FileTabService(
+            Substitute.For<ITranslationService>(),
+            Substitute.For<IFilePickerService>(),
+            Substitute.For<IFileTabFactory>(),
+            fileService,
+            Substitute.For<ITabService>(),
+            Substitute.For<IRecentFileService>()
+        );
+    }
 }

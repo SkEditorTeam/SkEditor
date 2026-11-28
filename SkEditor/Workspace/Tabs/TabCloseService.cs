@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Input;
 using FluentIcons.Common;
 using SkEditor.Configuration.Configs;
 using SkEditor.Core.Dialogs;
 using SkEditor.Core.Dialogs.Models;
 using SkEditor.Core.Localization;
-using SkEditor.Workspace.Files;
 using SkEditor.Workspace.Tabs.Capabilities;
 using SkEditor.Workspace.Tabs.Models;
 
 namespace SkEditor.Workspace.Tabs;
 
-public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileService files, IDialogService dialogs) : ITabCloseService
+public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileTabService fileTabs, IDialogService dialogs) : ITabCloseService
 {
     public async Task CloseMultipleAsync(CloseType closeType)
     {
@@ -30,7 +28,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileSer
         {
             foreach (IFileTab fileTab in saveableTabs.OfType<IFileTab>())
             {
-                await files.SaveFileAsync(fileTab);
+                await fileTabs.SaveFileAsync(fileTab);
             }
         }
 
@@ -101,7 +99,7 @@ public class TabCloseService(AppSettings appSettings, ITabService tabs, IFileSer
         bool savedAll = true;
         foreach (IFileTab unsavedTab in unsavedTabs.OfType<IFileTab>())
         {
-            bool saved = await files.SaveFileAsync(unsavedTab);
+            bool saved = await fileTabs.SaveFileAsync(unsavedTab);
             if (saved)
             {
                 continue;

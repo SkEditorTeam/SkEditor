@@ -21,7 +21,6 @@ using SkEditor.Workspace.Tabs.Models;
 namespace SkEditor.Layout.Menu.Providers;
 
 public class FileMenuProvider(
-    IFileService files,
     IFileTabService fileTabs,
     ITabService tabs,
     ITabCloseService tabClose,
@@ -68,7 +67,7 @@ public class FileMenuProvider(
             {
                 if (tabs.SelectedTab is IFileTab fileTab)
                 {
-                    await files.SaveFileAsync(fileTab);
+                    await fileTabs.SaveFileAsync(fileTab);
                 }
             })
             .WithInputGesture("Ctrl+S")
@@ -80,7 +79,7 @@ public class FileMenuProvider(
             {
                 if (tabs.SelectedTab is IFileTab fileTab)
                 {
-                    await files.SaveFileAsAsync(fileTab);
+                    await fileTabs.SaveFileAsAsync(fileTab);
                 }
             })
             .WithInputGesture("Ctrl+Shift+S")
@@ -92,7 +91,7 @@ public class FileMenuProvider(
             {
                 foreach (IFileTab fileTab in tabs.AllTabs.OfType<IFileTab>())
                 {
-                    await files.SaveFileAsync(fileTab);
+                    await fileTabs.SaveFileAsync(fileTab);
                 }
             })
             .WithInputGesture("Ctrl+Alt+S")
