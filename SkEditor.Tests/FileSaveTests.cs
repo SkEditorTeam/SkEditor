@@ -28,10 +28,8 @@ public class FileSaveTests
         MockFileSystem mockFileSystem = new();
         mockFileSystem.AddFile("/path/to/file.txt", new MockFileData("Test"));
 
-        FileTabViewModel fileTabViewModel = new("Test".ToTranslatable(), appSettings, experimentsConfig)
-        {
-            File = new LocalFile("/path/to/file.txt", fileSystem: mockFileSystem)
-        };
+        LocalFile file = new("/path/to/file.txt", fileSystem: mockFileSystem);
+        FileTabViewModel fileTabViewModel = new("Test".ToTranslatable(), file, appSettings, experimentsConfig);
 
         FileTabService fileTabService = CreateFileTabService();
 
@@ -51,10 +49,8 @@ public class FileSaveTests
         MockFileSystem mockFileSystem = new();
         mockFileSystem.AddFile("/path/to/file.txt", new MockFileData("oldcontent"));
 
-        FileTabViewModel fileTabViewModel = new("Test".ToTranslatable(), appSettings, experimentsConfig)
-        {
-            File = new LocalFile("/path/to/file.txt", fileSystem: mockFileSystem)
-        };
+        LocalFile file = new("/path/to/file.txt", fileSystem: mockFileSystem);
+        FileTabViewModel fileTabViewModel = new("Test".ToTranslatable(), file, appSettings, experimentsConfig);
 
         FileTabService fileTabService = CreateFileTabService();
 
@@ -69,7 +65,7 @@ public class FileSaveTests
         TabService tabService = new(
             Substitute.For<IFileFeatureService>(),
             new TabViewLocator(),
-            fileTabService,
+            new Lazy<IFileTabService>(() => fileTabService),
             dialogService,
             Substitute.For<INotificationService>()
         );

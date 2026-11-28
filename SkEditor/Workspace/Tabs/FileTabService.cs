@@ -112,7 +112,11 @@ public class FileTabService(
             return false;
         }
 
-        fileTab.File.Path = path;
+        BaseFile oldFile = fileTab.File;
+        BaseFile newFile = fileTab.File is SftpFile ? new LocalFile(path) : fileTab.File;
+        newFile.Path = path;
+
+        fileTab.ChangeFile(newFile);
 
         bool success = await files.PerformSaveAsync(fileTab);
 
@@ -123,7 +127,7 @@ public class FileTabService(
         }
         else
         {
-            fileTab.File.Path = oldPath;
+            fileTab.ChangeFile(oldFile);
         }
 
         return success;

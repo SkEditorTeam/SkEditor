@@ -248,10 +248,10 @@ public class ChangeDetectFeatureTests
 
         FileTabViewModel tab = new(
             TranslatableString.FromRawString(Path.GetFileName(path)),
+            localFile,
             new AppSettings(),
             new ExperimentsConfig())
         {
-            File = localFile,
             Document =
             {
                 Text = content

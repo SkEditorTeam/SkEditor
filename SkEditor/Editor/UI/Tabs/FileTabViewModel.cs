@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -21,40 +22,64 @@ using SkEditor.Workspace.Tabs.Capabilities;
 
 namespace SkEditor.Editor.UI.Tabs;
 
-public partial class FileTabViewModel(
-    TranslatableString header,
-    AppSettings appSettings,
-    ExperimentsConfig experiments)
-    : TabViewModelBase(header, Symbol.Document), ITextEditorTab, IFocusableTab, IFeatureTab,
-        IFileTab, ISaveStateTab, IDiagnosticsTab
+public sealed partial class FileTabViewModel : TabViewModelBase, ITextEditorTab, IFocusableTab, IFeatureTab,
+    IFileTab, ISaveStateTab, IDiagnosticsTab, IDisposable
 {
-    public AppSettings AppSettings { get; } = appSettings;
+    private readonly SerialDisposable _fileSubscription = new();
+
+    private readonly Subject<string?> _pathChanged = new();
+    private DisposableBag _disposables;
+    public AppSettings AppSettings { get; }
 
     [ObservableProperty]
     public partial int CaretOffset { get; set; } = 0;
-    
+
     public Dictionary<int, AnalyzerError> DiagnosticDictionary { get; } = [];
 
     public ObservableList<AnalyzerError> Diagnostics { get; } = [];
     public TextDocument Document { get; } = new();
-    public ExperimentsConfig Experiments { get; } = experiments;
-    public required BaseFile File { get; init; }
+    public ExperimentsConfig Experiments { get; }
+    public BaseFile File { get; private set; }
 
     [ObservableProperty]
-    public partial double FontSize { get; set; } = appSettings.EditorFontSize;
+    public partial double FontSize { get; set; }
 
     public override bool IsCacheable => true;
 
     public string? Path => File.Path;
+
+    public Observable<string?> PathChanged => _pathChanged;
 
     [ObservableProperty]
     public partial Vector ScrollOffset { get; set; } = Vector.Zero;
 
     public override string? ToolTip => Path;
 
-    public BindableReactiveProperty<bool> WordWrap { get; } = appSettings
-        .ObservePropertyChanged(x => x.IsWordWrapEnabled)
-        .ToBindableReactiveProperty(appSettings.IsWordWrapEnabled);
+    public BindableReactiveProperty<bool> WordWrap { get; }
+
+    public FileTabViewModel(TranslatableString header, BaseFile file,
+        AppSettings appSettings,
+        ExperimentsConfig experiments) : base(header, Symbol.Document)
+    {
+        AppSettings = appSettings;
+        Experiments = experiments;
+        FontSize = appSettings.EditorFontSize;
+        WordWrap = appSettings
+            .ObservePropertyChanged(x => x.IsWordWrapEnabled)
+            .ToBindableReactiveProperty(appSettings.IsWordWrapEnabled);
+
+        ChangeFile(file);
+    }
+
+    [MemberNotNull(nameof(File))]
+    public void ChangeFile(BaseFile file)
+    {
+        File = file;
+        _fileSubscription.Disposable = file.PathChanged.Subscribe(p => _pathChanged.OnNext(p));
+        
+        UpdateHeader();
+        _pathChanged.OnNext(file.Path);
+    }
 
     public async Task UpdateDocumentText(string text)
     {
@@ -98,8 +123,6 @@ public partial class FileTabViewModel(
     {
         RequestFocus();
     }
-    
-    public event Func<Task>? ClosingAsync;
 
     public async Task<bool> CanCloseAsync()
     {
@@ -115,4 +138,14 @@ public partial class FileTabViewModel(
 
         return true;
     }
+
+    public void Dispose()
+    {
+        _fileSubscription.Dispose();
+        _pathChanged.Dispose();
+        WordWrap.Dispose();
+        _disposables.Dispose();
+    }
+
+    public event Func<Task>? ClosingAsync;
 }

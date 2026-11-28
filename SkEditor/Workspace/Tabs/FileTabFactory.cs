@@ -23,10 +23,7 @@ public class FileTabFactory(
 
         TranslatableString header = TranslatableString.FromRawString(file.Name);
 
-        return new FileTabViewModel(header, appSettings, experiments)
-        {
-            File = file
-        };
+        return new FileTabViewModel(header, file, appSettings, experiments);
     }
 
     public FileTabViewModel CreateFromSession(SessionStateFile file)
@@ -58,9 +55,8 @@ public class FileTabFactory(
             throw new InvalidOperationException("The saved state file is missing both header and path!");
         }
 
-        return new FileTabViewModel(translatableHeader, appSettings, experiments)
+        return new FileTabViewModel(translatableHeader, new LocalFile(path, header), appSettings, experiments)
         {
-            File = new LocalFile(path, header),
             IsSaved = isSaved
         };
     }
@@ -69,9 +65,8 @@ public class FileTabFactory(
     {
         TranslatableString header = TranslatableString.FromRawString(name);
 
-        return new FileTabViewModel(header, appSettings, experiments)
+        return new FileTabViewModel(header, new LocalFile(name: name), appSettings, experiments)
         {
-            File = new LocalFile(name: name),
             IsSaved = true
         };
     }

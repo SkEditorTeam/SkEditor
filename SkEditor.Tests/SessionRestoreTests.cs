@@ -251,11 +251,9 @@ public class SessionRestoreTests
     {
         return new FileTabViewModel(
             TranslatableString.FromRawString(header),
+            file ?? new LocalFile(name: header),
             new AppSettings(),
-            new ExperimentsConfig())
-        {
-            File = file ?? new LocalFile(name: header)
-        };
+            new ExperimentsConfig());
     }
 
     private static SessionRestoreService CreateSut(
