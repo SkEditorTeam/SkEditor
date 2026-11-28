@@ -10,7 +10,7 @@ using SkEditor.Workspace.Tabs.Capabilities;
 namespace SkEditor.Configuration.UI;
 
 public class WhatsNewPageViewModel(StateConfig state, IWhatsNewService whatsNew)
-    : TabViewModelBase(TranslationKey.WhatsNewPageTitle, Symbol.Sparkle), IClosableTab
+    : TabViewModelBase(TranslationKey.WhatsNewPageTitle, Symbol.MegaphoneLoud), IClosableTab
 {
     public IReadOnlyList<WhatsNewFeaturedItem> FeaturedItems { get; } = whatsNew.GetFeaturedItems();
 
