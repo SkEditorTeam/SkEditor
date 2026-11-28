@@ -26,7 +26,8 @@ public interface IFileTabService
     /// </summary>
     /// <param name="fileTab">The tab to open.</param>
     /// <param name="select">Whether to select the tab after opening.</param>
-    Task LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true);
+    /// <returns>True if the file was loaded and opened successfully; otherwise, false.</returns>
+    Task<bool> LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true);
 
     /// <summary>
     ///     Updates the details of a file after it has been renamed or moved.

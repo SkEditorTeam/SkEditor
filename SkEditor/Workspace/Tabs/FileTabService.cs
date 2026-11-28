@@ -45,11 +45,6 @@ public class FileTabService(
 
     public async Task OpenFileAsync(BaseFile file)
     {
-        if (file is LocalFile && file.Name is not null && file.Path is not null)
-        {
-            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
-        }
-
         FileTabViewModel? existingTab =
             tabs.AllTabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
 
@@ -60,10 +55,15 @@ public class FileTabService(
         }
 
         FileTabViewModel fileTab = fileTabFactory.CreateFromFile(file);
-        await LoadAndOpenFileTabAsync(fileTab);
+        bool opened = await LoadAndOpenFileTabAsync(fileTab);
+        
+        if (opened && file is LocalFile && file.Name is not null && file.Path is not null)
+        {
+            recentFiles.AddRecentItem(file.Name, file.Path, false, DateTime.Now);
+        }
     }
 
-    public async Task LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true)
+    public async Task<bool> LoadAndOpenFileTabAsync(IFileTab fileTab, bool select = true)
     {
         Task<bool> fullLoadTask = files.LoadAndReadFileAsync(fileTab);
 
@@ -74,11 +74,14 @@ public class FileTabService(
         if (completedTask == fullLoadTask)
         {
             bool isSuccess = await fullLoadTask;
-            if (isSuccess)
+            if (!isSuccess)
             {
-                fileTab.IsLoading = false;
-                tabs.OpenTab(fileTab, select);
+                return false;
             }
+
+            fileTab.IsLoading = false;
+            tabs.OpenTab(fileTab, select);
+            return true;
         }
         else
         {
@@ -93,6 +96,8 @@ public class FileTabService(
             {
                 tabs.ForceCloseTab(fileTab);
             }
+
+            return isSuccess;
         }
     }
 
