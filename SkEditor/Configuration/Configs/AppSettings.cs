@@ -147,12 +147,6 @@ public partial class AppSettings : BaseConfig<AppSettings>
     public partial bool IsExplorerForwardSlashesCopyEnabled { get; set; } = true;
 
     /// <summary>
-    ///     Whether this is (likely) the first time the user runs the application. Used to show the tutorial.
-    /// </summary>
-    [ObservableProperty]
-    public partial bool IsFirstRun { get; set; } = true;
-
-    /// <summary>
     ///     Whether to enable font ligatures in the editor (if supported by the active font).
     /// </summary>
     [ObservableProperty]

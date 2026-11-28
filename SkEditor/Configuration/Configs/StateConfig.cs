@@ -47,6 +47,11 @@ public partial class StateConfig : BaseConfig<StateConfig>
     [ObservableProperty]
     public partial double SidebarPaneSize { get; set; } = 320;
 
+    /// <summary>
+    ///     Whether to show the "What's new" tab on app startup (first launch or user didn't close the what's new page yet).
+    /// </summary>
+    [ObservableProperty]
+    public partial bool ShouldShowWhatsNewPage { get; set; } = true;
 
     protected override Environment.SpecialFolder TargetFolder => Environment.SpecialFolder.LocalApplicationData;
     protected override JsonTypeInfo<StateConfig> TypeInfo => AppJsonContext.Default.StateConfig;

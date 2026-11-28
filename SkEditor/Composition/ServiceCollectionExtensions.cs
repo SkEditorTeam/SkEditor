@@ -92,6 +92,7 @@ public static class ServiceCollectionExtensions
             services.AddSingleton<IThemeService, ThemeService>();
             services.AddSingleton<ISyntaxService, SyntaxService>();
             services.AddSingleton<IWelcomeService, WelcomeService>();
+            services.AddSingleton<IWhatsNewService, WhatsNewService>();
             services.AddSingleton<ITranslationService, TranslationService>();
             services.AddSingleton<IDiscordIntegrationService, DiscordIntegrationService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
@@ -242,6 +243,7 @@ public static class ServiceCollectionExtensions
         public void AddTabs()
         {
             services.AddTransientWithFactory<SettingsTabViewModel>();
+            services.AddTransientWithFactory<WhatsNewPageViewModel>();
             services.AddTransientWithFactory<DocumentationTabViewModel>();
 
             services.AddSingleton<TabViewLocator>(_ =>
@@ -251,6 +253,7 @@ public static class ServiceCollectionExtensions
                 locator.Register<SettingsTabViewModel, SettingsTabView>();
                 locator.Register<DocumentationTabViewModel, DocumentationTabView>();
                 locator.Register<FileTabViewModel, FileTabView>();
+                locator.Register<WhatsNewPageViewModel, WhatsNewPage>();
 
                 return locator;
             });
