@@ -21,16 +21,14 @@ public class LanguageChoiceProvider(ITranslationService translationService) : IS
     {
         List<string> availableLanguages = [];
 
-        if (!Directory.Exists(translationService.LanguagesFolder))
+        if (Directory.Exists(translationService.LanguagesFolder))
         {
-            return availableLanguages;
+            string[] files = Directory.GetFiles(translationService.LanguagesFolder);
+            availableLanguages.AddRange(files
+                .Select(Path.GetFileNameWithoutExtension)
+                .Where(x => x is not null)
+                .Cast<string>());
         }
-        
-        string[] files = Directory.GetFiles(translationService.LanguagesFolder);
-        availableLanguages.AddRange(files
-            .Select(Path.GetFileNameWithoutExtension)
-            .Where(x => x is not null)
-            .Cast<string>());
 
         availableLanguages.Add("English");
         availableLanguages.Sort(Comparer);
