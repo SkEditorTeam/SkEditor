@@ -46,7 +46,7 @@ public class FileTabService(
     public async Task OpenFileAsync(BaseFile file)
     {
         FileTabViewModel? existingTab =
-            tabs.AllTabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.Path == file.Path);
+            tabs.AllTabs.OfType<FileTabViewModel>().FirstOrDefault(tab => tab.File.IsSameFile(file));
 
         if (existingTab is not null)
         {

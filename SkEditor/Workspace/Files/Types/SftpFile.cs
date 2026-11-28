@@ -50,4 +50,12 @@ public class SftpFile(string path, string name, RemoteConnection connection, IRe
             throw new UnauthorizedAccessException($"Permission denied when trying to save file at {Path}.", ex);
         }
     }
+    
+    public override bool IsSameFile(BaseFile other)
+    {
+        return other is SftpFile sftp
+               && Path is not null
+               && Connection.Id == sftp.Connection.Id
+               && Path == sftp.Path;
+    }
 }

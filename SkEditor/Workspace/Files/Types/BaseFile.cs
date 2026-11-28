@@ -92,6 +92,14 @@ public abstract class BaseFile(string? path, string? name)
     public abstract Task SaveAsync(Stream stream, CancellationToken token);
 
     /// <summary>
+    ///     Compares this file with another file to determine if they represent the same file.
+    /// </summary>
+    public virtual bool IsSameFile(BaseFile other)
+    {
+        return false;
+    }
+
+    /// <summary>
     ///     Gets the last write time of the file on disk, UTC.
     /// </summary>
     protected virtual DateTime? GetLastWriteTimeUtc()

@@ -78,6 +78,23 @@ public class LocalFile(string? path = null, string? name = null, IFileSystem? fi
         }
     }
 
+    public override bool IsSameFile(BaseFile other)
+    {
+        if (other is not LocalFile local || Path is null || local.Path is null)
+        {
+            return false;
+        }
+
+        StringComparison comparison = OperatingSystem.IsWindows()
+            ? StringComparison.OrdinalIgnoreCase
+            : StringComparison.Ordinal;
+
+        return string.Equals(
+            System.IO.Path.GetFullPath(Path),
+            System.IO.Path.GetFullPath(local.Path),
+            comparison);
+    }
+
     protected override DateTime? GetLastWriteTimeUtc()
     {
         if (Path is null || !_fileSystem.File.Exists(Path))
