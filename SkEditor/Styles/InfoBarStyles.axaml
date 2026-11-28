@@ -83,6 +83,7 @@
                                 VerticalAlignment="Center">
                             <Viewbox Height="10" Width="10">
                                 <ui:FAIconSourceElement Name="PART_Icon" VerticalAlignment="Center"
+                                                        Foreground="Black"
                                                         HorizontalAlignment="Center" />
                             </Viewbox>
                         </Border>
@@ -139,6 +140,9 @@
 
             <Style Selector="^ /template/ ui|FAIconSourceElement#PART_Icon">
                 <Setter Property="IconSource" Value="{StaticResource ExclamationMarkIcon}" />
+                <Setter Property="RenderTransform">
+                    <TranslateTransform X="0.5" />
+                </Setter>
             </Style>
         </Style>
 
